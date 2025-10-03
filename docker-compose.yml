@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  ui-backend:
+    build: ./ui-backend
+    container_name: ui-backend
+    ports:
+      - "5001:5001"
+    environment:
+      - AI_BACKEND_URL=http://ai-backend:5002
+    depends_on:
+      - ai-backend
+    networks:
+      - app-network
+    volumes:
+      - ./ui-backend/uploads:/app/uploads
+
+  ai-backend:
+    build: ./ai-backend
+    container_name: ai-backend
+    ports:
+      - "5002:5002"
+    networks:
+      - app-network
+    volumes:
+      - ./ai-backend/outputs:/app/outputs
+
+networks:
+  app-network:
+    driver: bridge
